@@ -3,15 +3,13 @@ package com.example.springbootcrud.controller;
 import com.example.springbootcrud.exception.ResourceNotFoundException;
 import com.example.springbootcrud.model.City;
 import com.example.springbootcrud.repository.CityRepository;
+import jdk.management.resource.ResourceRequestDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/crud")
@@ -21,7 +19,7 @@ public class CityContoller {
 
     @GetMapping("/city")
     public List<City> getAllCities(){
-        return (List<City>) cityRepository.findAll();
+        return cityRepository.findAll();
     }
 
     @GetMapping("city/{id}")
@@ -31,5 +29,16 @@ public class CityContoller {
         return ResponseEntity.ok().body(city);
     }
 
+    @PostMapping("/city")
+    public City createCity(@Valid @RequestBody City city){
+        return cityRepository.save(city);
+    }
 
+    @DeleteMapping("/city/{id}")
+    public ResponseEntity<City> deleteCity(@PathVariable(value = "id") Long id) throws ResourceNotFoundException{
+        City city = cityRepository.findById(id)
+                .orElseThrow(() -> new ResourceRequestDeniedException("City not found for this id : " + id));
+        cityRepository.delete(city);
+        return ResponseEntity.ok().build();
+    }
 }

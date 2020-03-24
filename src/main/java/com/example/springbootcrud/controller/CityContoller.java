@@ -31,7 +31,7 @@ public class CityContoller {
 
     @GetMapping("/city/{id}")
     public ResponseEntity<Optional<City>> findById(@PathVariable Long id) throws ResourceNotFoundException {
-        return ResponseEntity.ok(cityService.finndById(id));
+        return ResponseEntity.ok(cityService.findById(id));
     }
     @PutMapping("/city/{id}")
     public ResponseEntity<City> update(@PathVariable Long id, @Valid @RequestBody City city) throws ResourceNotFoundException {

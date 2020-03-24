@@ -4,6 +4,8 @@ import com.example.springbootcrud.exception.ResourceNotFoundException;
 import com.example.springbootcrud.model.City;
 import com.example.springbootcrud.repository.CityRepository;
 import jdk.management.resource.ResourceRequestDeniedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.Optional;
 @Service
 public class CityService {
     private final CityRepository cityRepository;
+    private Logger LOG = LoggerFactory.getLogger(CityService.class);
 
     public CityService(CityRepository cityRepository) {
         this.cityRepository = cityRepository;
@@ -21,7 +24,7 @@ public class CityService {
         return cityRepository.findAll();
     }
 
-    public Optional<City> finndById(Long id) throws ResourceNotFoundException {
+    public Optional<City> findById(Long id) throws ResourceNotFoundException {
         City c = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found for this id: " + id));
         return cityRepository.findById(id);
